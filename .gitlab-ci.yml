@@ -1,0 +1,27 @@
+stages:
+  - build
+  - test
+
+build-latest:
+  stage: build
+  image: rust:latest
+  script:
+    - cargo build --verbose
+
+test-latest:
+  stage: test
+  image: rust:latest
+  script:
+    - cargo test --verbose
+
+pages:
+  stage: build
+  image: rust:latest
+  only: 
+    - master
+  script:
+    - cargo doc
+    - cp -R target/doc/* public
+  artifacts:
+    paths:
+      - public
