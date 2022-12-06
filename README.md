@@ -75,3 +75,7 @@ and [`Vec::pop()`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.pop)
 #### Part2 - many crates at once
 Implemented with [`Vec::split_off()`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.split_off) 
 and [`Vec::extend()`](https://doc.rust-lang.org/std/iter/trait.Extend.html#tymethod.extend)
+
+### [Day 6](https://adventofcode.com/2022/day/6)
+Use a [`HashMap<char, usize>`](https://doc.rust-lang.org/std/collections/struct.HashMap.html) to store char positions 
+while iterating (once) over the string. Maintain the count of current consecutive distinct chars and return index if count == required.
