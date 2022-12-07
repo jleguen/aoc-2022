@@ -1,14 +1,12 @@
-
 use parse_display::{Display, FromStr};
 use std::collections::HashSet;
-use std::string::ParseError;
 use std::str::FromStr;
-
+use std::string::ParseError;
 
 #[derive(Debug)]
 pub struct RuckSack {
-    one : HashSet<char>,
-    two : HashSet<char>,
+    one: HashSet<char>,
+    two: HashSet<char>,
 }
 
 impl std::str::FromStr for RuckSack {
@@ -20,9 +18,9 @@ impl std::str::FromStr for RuckSack {
         let size = s.len() / 2;
         for i in 0..(size as usize) {
             one.insert(s.chars().nth(i).unwrap());
-            two.insert(s.chars().nth(size+i).unwrap());
+            two.insert(s.chars().nth(size + i).unwrap());
         }
-        let res = RuckSack{one, two};
+        let res = RuckSack { one, two };
         //println!("{:?} {}", &res, &res.part1());
         Ok(res)
     }
@@ -37,8 +35,8 @@ impl RuckSack {
 
     fn value(c: &char) -> u8 {
         match c {
-            'a' ..= 'z' => (*c as u8) - ('a' as u8) + 1,
-            'A' ..= 'Z' => (*c as u8) - ('A' as u8) + 27,
+            'a'..='z' => (*c as u8) - ('a' as u8) + 1,
+            'A'..='Z' => (*c as u8) - ('A' as u8) + 27,
             i => panic!("Unknown {}", i),
         }
     }
@@ -52,7 +50,6 @@ impl RuckSack {
         h.extend(&self.two);
         h
     }
-
 }
 
 fn badge(group: &Vec<&RuckSack>) -> u64 {
@@ -63,7 +60,7 @@ fn badge(group: &Vec<&RuckSack>) -> u64 {
     for r in group {
         println!("New {:?}", &r.part2());
         res = res.intersection(&r.part2()).map(|&x| x).collect();
-        println!("RES {:?}", res);;
+        println!("RES {:?}", res);
     }
 
     assert_eq!(1, res.len());
@@ -81,7 +78,6 @@ pub fn input_generator(input: &str) -> Vec<RuckSack> {
     res
 }
 
-
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
@@ -97,14 +93,13 @@ pub fn part2(input: &Vec<RuckSack>) -> u64 {
     let mut res = 0;
 
     // Iterate over groups of 3
-    for i in 0..input.len()/3 {
-        let group: Vec<_> = input[i*3 ..= i*3+2].iter().collect();
+    for i in 0..input.len() / 3 {
+        let group: Vec<_> = input[i * 3..=i * 3 + 2].iter().collect();
         res += badge(&group);
     }
 
     res
 }
-
 
 // ---------------------------------------------------------------------------
 #[cfg(test)]
@@ -136,4 +131,3 @@ CrZsJsPPZsGzwwsLwLmpwMDw";
         assert_eq!(70, part2(&sacks))
     }
 }
-

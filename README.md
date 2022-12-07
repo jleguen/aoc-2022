@@ -79,3 +79,8 @@ and [`Vec::extend()`](https://doc.rust-lang.org/std/iter/trait.Extend.html#tymet
 ### [Day 6](https://adventofcode.com/2022/day/6)
 Use a [`HashMap<char, usize>`](https://doc.rust-lang.org/std/collections/struct.HashMap.html) to store char positions 
 while iterating (once) over the string. Maintain the count of current consecutive distinct chars and return index if count == required.
+
+### [Day 7](https://adventofcode.com/2022/day/7)
+Trees and interesting data structures in Rust are Hard (tm)
+
+Instead, we hard-code the tree traversal while parsing the input.
