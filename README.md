@@ -84,3 +84,8 @@ while iterating (once) over the string. Maintain the count of current consecutiv
 Trees and interesting data structures in Rust are Hard (tm)
 
 Instead, we hard-code the tree traversal while parsing the input.
+
+### [Day 8](https://adventofcode.com/2022/day/8)
+
+### [Day 9](https://adventofcode.com/2022/day/9)
+Simple loop to simulate movements knot by knot. Use integer euclidian distance and not manhattan distance!
