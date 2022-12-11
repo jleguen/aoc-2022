@@ -1,7 +1,7 @@
 //use parse_display::{Display, FromStr};
-use std::collections::HashMap;
-use std::string::ParseError;
-use toodee::{Coordinate, TooDee, TooDeeOps, TooDeeOpsMut};
+//use std::collections::HashMap;
+//use std::string::ParseError;
+use toodee::{Coordinate, TooDee, TooDeeOps};
 
 // ---------------------------------------------------------------------------
 #[derive(Debug)]
@@ -18,11 +18,10 @@ impl Forest {
             input.into_iter().map(|v| v.clone()).flatten().collect(),
         );
         let vis = TooDee::new(height.num_cols(), height.num_rows());
-        let mut forest = Forest {
+        Forest {
             tree_height: height,
             visible: vis,
-        };
-        forest
+        }
     }
 
     fn count_visible(&self) -> usize {
@@ -51,7 +50,6 @@ impl Forest {
         let val = self.tree_height[coord];
 
         let mut max = val;
-        let mut min = 0;
         let mut num: [usize; 4] = [0, 0, 0, 0];
         // up
         println!("\nViewing from {} {}", coord.0, coord.1);
@@ -69,7 +67,6 @@ impl Forest {
         }
         // down
         max = val;
-        min = 0;
         for row in (coord.1 + 1)..rows {
             let cur = self.tree_height[(coord.0, row)];
             print!("  down  {} {} : {} ({})", coord.0, row, cur, max);
@@ -84,7 +81,6 @@ impl Forest {
         }
         // left
         max = val;
-        min = 0;
         for col in (0..coord.0).rev() {
             let cur = self.tree_height[(col, coord.1)];
             print!("  left  {} {} : {} ({})", col, coord.1, cur, max);
@@ -99,7 +95,6 @@ impl Forest {
         }
         // right
         max = val;
-        min = 0;
         for col in (coord.0 + 1)..cols {
             let cur = self.tree_height[(col, coord.1)];
             print!("  right {} {} : {} ({})", col, coord.1, cur, max);
@@ -171,6 +166,7 @@ impl Forest {
             //self.print_visible();
         }
 
+        self.print_visible();
         //println!("{:?}", self);
     }
 }
@@ -222,7 +218,7 @@ mod tests {
 
     #[test]
     fn test_generator() {
-        let mut forest = input_generator(INPUT);
+        let _forest = input_generator(INPUT);
     }
 
     #[test]

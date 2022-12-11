@@ -1,6 +1,6 @@
 use parse_display::{Display, FromStr};
 use std::collections::HashMap;
-use std::string::ParseError;
+//use std::string::ParseError;
 
 // ---------------------------------------------------------------------------
 
@@ -38,11 +38,11 @@ pub fn input_generator(input: &str) -> HashMap<String, usize> {
                     path.clear();
                     let name = String::from("/");
                     path.push(name.clone());
-                    let top = dirs.entry(full_name(&path)).or_insert_with(|| 0);
+                    let _top = dirs.entry(full_name(&path)).or_insert_with(|| 0);
                 }
                 Command::CdIn(name) => {
                     path.push(name.clone());
-                    let cur = dirs.entry(full_name(&path)).or_insert_with(|| 0);
+                    let _cur = dirs.entry(full_name(&path)).or_insert_with(|| 0);
                 }
                 Command::CdOut => {
                     path.pop();

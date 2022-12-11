@@ -1,6 +1,6 @@
 use parse_display::{Display, FromStr};
-use std::collections::HashMap;
-use std::string::ParseError;
+//use std::collections::HashMap;
+//use std::string::ParseError;
 //use toodee::{Coordinate, TooDee, TooDeeOps, TooDeeOpsMut};
 
 // ---------------------------------------------------------------------------
@@ -10,15 +10,6 @@ pub enum Inst {
     Noop,
     #[display("addx {0}")]
     Add(i64),
-}
-
-impl Inst {
-    fn cycles(&self) -> usize {
-        match self {
-            Self::Noop => 1,
-            Self::Add(_) => 2,
-        }
-    }
 }
 
 struct CRT {
@@ -312,13 +303,13 @@ noop";
 
     #[test]
     fn test_generator() {
-        let mut inst = input_generator(INPUT);
+        let _inst = input_generator(INPUT);
     }
 
     #[test]
     fn test_part_small() {
         let mut cpu = Cpu::default();
-        let mut inst = input_generator(INPUT);
+        let inst = input_generator(INPUT);
         for i in inst.iter() {
             cpu.exec(&i);
             println!("{}", cpu);
@@ -332,7 +323,7 @@ noop";
     #[test]
     fn test_part1() {
         let mut cpu = Cpu::default();
-        let mut inst = input_generator(INPUT2);
+        let inst = input_generator(INPUT2);
 
         println!("{}", cpu);
         for i in inst.iter() {

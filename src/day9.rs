@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use parse_display::{Display, FromStr};
-use std::collections::HashMap;
-use std::string::ParseError;
+//use std::collections::HashMap;
+//use std::string::ParseError;
 //use toodee::{Coordinate, TooDee, TooDeeOps, TooDeeOpsMut};
 
 // ---------------------------------------------------------------------------
@@ -38,6 +38,7 @@ struct Rope {
 }
 
 impl Coordinate {
+    #[cfg(test)]
     // (col, row) or (x, y)
     fn new(col: i32, row: i32) -> Self {
         Coordinate { col, row }
@@ -155,7 +156,7 @@ D 1
 L 5
 R 2";
 
-    const INPUT2: &str = "R 5
+    const _INPUT2: &str = "R 5
 U 8
 L 8
 D 3
@@ -173,7 +174,7 @@ U 20";
 
     #[test]
     fn test_generator() {
-        let mut moves = input_generator(INPUT);
+        let moves = input_generator(INPUT);
         assert_eq!(
             &Move {
                 dir: Dir::Right,
@@ -202,7 +203,7 @@ U 20";
 
     #[test]
     fn test_part1() {
-        let mut moves = input_generator(INPUT);
+        let moves = input_generator(INPUT);
         assert_eq!(13, part1(&moves));
     }
 }

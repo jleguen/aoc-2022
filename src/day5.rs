@@ -1,8 +1,8 @@
-use ascii;
+//use ascii;
 use parse_display::{Display, FromStr};
-use std::collections::HashSet;
-use std::ops::RangeInclusive;
-use std::string::ParseError;
+//use std::collections::HashSet;
+//use std::ops::RangeInclusive;
+//use std::string::ParseError;
 
 // number, from, to
 // Input is "move 1 from 2 to 1"
@@ -143,7 +143,7 @@ move 1 from 1 to 2";
 
     #[test]
     fn test_generator() {
-        let (stacks, moves) = input_generator(INPUT);
+        let (_stacks, moves) = input_generator(INPUT);
         assert_eq!(4, moves.len());
     }
 
