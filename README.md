@@ -89,3 +89,8 @@ Instead, we hard-code the tree traversal while parsing the input.
 
 ### [Day 9](https://adventofcode.com/2022/day/9)
 Simple loop to simulate movements knot by knot. Use integer euclidian distance and not manhattan distance!
+
+### [Day 10](https://adventofcode.com/2022/day/10)
+
+### [Day 11](https://adventofcode.com/2022/day/11)
+Moudlar arithmetic used to keep worry levels managable. Part1 divides by 3, part2 divides by product of test values.
