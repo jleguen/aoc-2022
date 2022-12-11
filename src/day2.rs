@@ -12,11 +12,11 @@ pub enum RPS {
 
 #[derive(Display, FromStr, Debug, PartialEq, Copy, Clone)]
 pub enum RoundResult {
-    #[from_str(regex= "Z")]
+    #[from_str(regex = "Z")]
     Win,
-    #[from_str(regex= "X")]
+    #[from_str(regex = "X")]
     Lose,
-    #[from_str(regex= "Y")]
+    #[from_str(regex = "Y")]
     Draw,
 }
 
@@ -29,7 +29,6 @@ impl RoundResult {
         }
     }
 }
-
 
 impl RPS {
     fn value(&self) -> u64 {
@@ -46,17 +45,17 @@ impl RPS {
                 Self::Rock => RoundResult::Draw,
                 Self::Paper => RoundResult::Lose,
                 Self::Scissors => RoundResult::Win,
-            }
+            },
             Self::Paper => match other {
                 Self::Rock => RoundResult::Win,
                 Self::Paper => RoundResult::Draw,
-                Self::Scissors => RoundResult::Lose
-            }
+                Self::Scissors => RoundResult::Lose,
+            },
             Self::Scissors => match other {
                 Self::Rock => RoundResult::Lose,
                 Self::Paper => RoundResult::Win,
-                Self::Scissors => RoundResult::Draw
-            }
+                Self::Scissors => RoundResult::Draw,
+            },
         }
     }
 
@@ -75,13 +74,10 @@ impl RPS {
     fn score(&self, other: &RPS) -> u64 {
         self.value() + self.eval(other).value()
     }
-
 }
-
 
 pub type Round = (RPS, RPS);
 pub type Round2 = (RPS, RoundResult);
-
 
 // ---------------------------------------------------------------------------
 #[aoc_generator(day2, part1)]
@@ -132,7 +128,6 @@ pub fn part2(input: &Vec<Round2>) -> u64 {
     res
 }
 
-
 // ---------------------------------------------------------------------------
 #[cfg(test)]
 mod tests {
@@ -167,4 +162,3 @@ C Z";
         assert_eq!(12, score);
     }
 }
-

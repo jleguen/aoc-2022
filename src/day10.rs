@@ -45,17 +45,19 @@ impl CRT {
     fn display(&mut self, xs: &Vec<i64>) {
         assert!(xs.len() > 240);
         for i in 1..=240 {
-            let line = (i-1) / 40;
-            let col = (i-1) % 40;
+            let line = (i - 1) / 40;
+            let col = (i - 1) % 40;
             let x = xs[i];
-            self.pixels[line][col] = (col as i64) >= x-1 && (col as i64) <= x+1;
+            self.pixels[line][col] = (col as i64) >= x - 1 && (col as i64) <= x + 1;
         }
     }
 }
 
 impl Default for CRT {
     fn default() -> Self {
-        CRT { pixels: [[false; 40]; 6] }
+        CRT {
+            pixels: [[false; 40]; 6],
+        }
     }
 }
 
@@ -95,10 +97,13 @@ impl Cpu {
 
 impl Default for Cpu {
     fn default() -> Self {
-        Cpu { x: 1, cycle: 0, sig: Vec::from([0]) }
+        Cpu {
+            x: 1,
+            cycle: 0,
+            sig: Vec::from([0]),
+        }
     }
 }
-
 
 // ---------------------------------------------------------------------------
 #[aoc_generator(day10)]
@@ -323,7 +328,6 @@ noop";
         assert_eq!(1, cpu.signal_strength(1));
         assert_eq!(2, cpu.signal_strength(2));
         assert_eq!(16, cpu.signal_strength(4));
-
     }
     #[test]
     fn test_part1() {
@@ -346,5 +350,4 @@ noop";
         // Part1
         assert_eq!(13140, part1(&inst));
     }
-
 }

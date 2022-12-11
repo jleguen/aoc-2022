@@ -1,18 +1,15 @@
-
 use parse_display::{Display, FromStr};
 use std::collections::HashSet;
-use std::string::ParseError;
 use std::ops::RangeInclusive;
+use std::string::ParseError;
 
 type Range = (u32, u32);
-
 
 trait AOC {
     fn build(s: &str) -> Range;
     fn contains(&self, other: &Range) -> bool;
     fn overlaps(&self, other: &Range) -> bool;
 }
-
 
 impl AOC for Range {
     fn build(s: &str) -> Self {
@@ -27,13 +24,12 @@ impl AOC for Range {
     }
 
     fn overlaps(&self, other: &Range) -> bool {
-        (other.0 ..= other.1).contains(&self.0) ||
-        (other.0 ..= other.1).contains(&self.1) ||
-        (self.0 ..= self.1).contains(&other.0) ||
-        (self.0 ..= self.1).contains(&other.1)
+        (other.0..=other.1).contains(&self.0)
+            || (other.0..=other.1).contains(&self.1)
+            || (self.0..=self.1).contains(&other.0)
+            || (self.0..=self.1).contains(&other.1)
     }
 }
-
 
 // ---------------------------------------------------------------------------
 #[aoc_generator(day4)]
@@ -46,7 +42,6 @@ pub fn input_generator(input: &str) -> Vec<(Range, Range)> {
     }
     res
 }
-
 
 // ---------------------------------------------------------------------------
 
@@ -74,7 +69,6 @@ pub fn part2(input: &Vec<(Range, Range)>) -> u64 {
     }
     res
 }
-
 
 // ---------------------------------------------------------------------------
 #[cfg(test)]
@@ -106,4 +100,3 @@ mod tests {
         assert_eq!(4, part2(&pairs))
     }
 }
-

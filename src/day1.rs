@@ -1,4 +1,3 @@
-
 /// Split up input into Vec<Elf> each Elf is a Vec<u32>
 #[aoc_generator(day1)]
 pub fn input_generator(input: &str) -> Vec<Vec<u32>> {
@@ -22,7 +21,10 @@ pub fn input_generator(input: &str) -> Vec<Vec<u32>> {
 // ---------------------------------------------------------------------------
 #[aoc(day1, part1)]
 pub fn part1(input: &Vec<Vec<u32>>) -> u32 {
-    let mut food : Vec<u32> = input.iter().map(|x| x.iter().fold(0, |sum, y| sum + y)).collect();
+    let mut food: Vec<u32> = input
+        .iter()
+        .map(|x| x.iter().fold(0, |sum, y| sum + y))
+        .collect();
     food.sort();
     food.reverse();
     food[0]
@@ -30,12 +32,14 @@ pub fn part1(input: &Vec<Vec<u32>>) -> u32 {
 
 #[aoc(day1, part2)]
 pub fn part2(input: &Vec<Vec<u32>>) -> u32 {
-    let mut food : Vec<u32> = input.iter().map(|x| x.iter().fold(0, |sum, y| sum + y)).collect();
+    let mut food: Vec<u32> = input
+        .iter()
+        .map(|x| x.iter().fold(0, |sum, y| sum + y))
+        .collect();
     food.sort();
     food.reverse();
-    food[0]+food[1] + food[2]
+    food[0] + food[1] + food[2]
 }
-
 
 // ---------------------------------------------------------------------------
 #[cfg(test)]
