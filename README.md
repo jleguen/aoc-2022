@@ -93,4 +93,7 @@ Simple loop to simulate movements knot by knot. Use integer euclidian distance a
 ### [Day 10](https://adventofcode.com/2022/day/10)
 
 ### [Day 11](https://adventofcode.com/2022/day/11)
-Moudlar arithmetic used to keep worry levels managable. Part1 divides by 3, part2 divides by product of test values.
+Modular arithmetic used to keep worry levels managable. Part1 divides by 3, part2 divides by product of test values.
+
+### [Day 12](https://adventofcode.com/2022/day/12)
+Classic Dijkstra. Use crates [`TooDee`](https://docs.rs/toodee/latest/toodee/index.html) and [`pathfinding`](https://docs.rs/pathfinding/latest/pathfinding/index.html)
