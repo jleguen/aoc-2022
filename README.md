@@ -97,3 +97,6 @@ Modular arithmetic used to keep worry levels managable. Part1 divides by 3, part
 
 ### [Day 12](https://adventofcode.com/2022/day/12)
 Classic Dijkstra. Use crates [`TooDee`](https://docs.rs/toodee/latest/toodee/index.html) and [`pathfinding`](https://docs.rs/pathfinding/latest/pathfinding/index.html)
+
+### [Day 13](https://adventofcode.com/2022/day/13)
+

@@ -1,5 +1,5 @@
-use itertools::Itertools;
-use parse_display::{Display, FromStr};
+//use itertools::Itertools;
+//use parse_display::{Display, FromStr};
 //use std::collections::HashMap;
 //use std::string::ParseError;
 use toodee::{Coordinate, TooDee, TooDeeOps};
