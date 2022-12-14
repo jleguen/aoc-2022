@@ -1,19 +1,19 @@
-use parse_display;
+//use parse_display;
 //use std::collections::HashMap;
 //use std::fmt;
-use std::str::FromStr;
-use std::string::ParseError;
+//use std::str::FromStr;
+//use std::string::ParseError;
 //use std::sync::{Arc, Mutex};
 //use toodee::{Coordinate, TooDee, TooDeeOps, TooDeeOpsMut};
 //use num_bigint::{u64, Tou64};
 //use std::ops::{Rem, Div};
-use serde_json::{Number, Value};
+use serde_json::Value;
 use std::cmp::Ordering;
 use std::iter::zip;
 
 // returns true if left <= right
 // XXX [2,3,4] <= 4
-fn compare(left: &Value, right: &Value, single: bool) -> Option<Ordering> {
+fn compare(left: &Value, right: &Value, _single: bool) -> Option<Ordering> {
     println!("Compare {} and {}", left, right);
     match (left, right) {
         (Value::Number(one), Value::Number(two)) => {

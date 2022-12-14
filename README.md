@@ -100,3 +100,5 @@ Classic Dijkstra. Use crates [`TooDee`](https://docs.rs/toodee/latest/toodee/ind
 
 ### [Day 13](https://adventofcode.com/2022/day/13)
 
+### [Day 14](https://adventofcode.com/2022/day/14)
+
