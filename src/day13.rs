@@ -7,7 +7,7 @@
 //use toodee::{Coordinate, TooDee, TooDeeOps, TooDeeOpsMut};
 //use num_bigint::{u64, Tou64};
 //use std::ops::{Rem, Div};
-use serde_json::Value;
+use serde_json::{Number, Value};
 use std::cmp::Ordering;
 use std::iter::zip;
 
