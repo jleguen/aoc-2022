@@ -49,18 +49,17 @@ impl Sensor {
         self.coverage() + other.coverage() > dist
     }
 
+    // Points one unit outside of the coverage
     fn limits(&self) -> Vec<Coordinate> {
         let cov = self.coverage();
         let mut res: Vec<Coordinate> = Vec::new();
-        for i in -cov - 1..0 {
-            res.push(Coordinate(self.position.0 + i, self.position.1 + (cov + i)));
-            res.push(Coordinate(self.position.0 + i, self.position.1 - (cov + i)));
+        for i in 0..=cov+1 {
+            res.push(Coordinate(self.position.0 + i, self.position.1 + (cov+1 - i)));
+            res.push(Coordinate(self.position.0 + i, self.position.1 - (cov+1) + i));
+            res.push(Coordinate(self.position.0 - i, self.position.1 + (cov+1 - i)));
+            res.push(Coordinate(self.position.0 - i, self.position.1 - (cov+1) + i));
         }
-        for i in 0..=cov + 1 {
-            res.push(Coordinate(self.position.0 + i, self.position.1 + (cov - i)));
-            res.push(Coordinate(self.position.0 + i, self.position.1 - (cov - i)));
-        }
-        println!("{:?}", res);
+        //println!("{:?}", res);
         res
     }
 }
@@ -118,9 +117,9 @@ impl Map {
         //println!("  Sensor {:?} Cov {cov} | dist {dist}", sensor.position);
         if point == &sensor.beacon {
             //print!("B");
-            return false;
+            //return false;
         }
-        if point.dist(&sensor.position) <= sensor.coverage() {
+        if dist <= cov {
             return true;
         }
         return false;
@@ -130,6 +129,7 @@ impl Map {
         //println!("is_covered {:?}", point);
         for sensor in self.sensors.iter() {
             if Self::is_covered_by_sensor(point, &sensor) {
+                //println!("Covered by sensor {sensor}");
                 return true;
             }
         }
@@ -193,14 +193,16 @@ impl Map {
 
     fn find_uncovered(&self, topleft: &Coordinate, botright: &Coordinate) -> Coordinate {
         for sensor in self.sensors.iter() {
-            println!("{}", sensor);
+            //println!("{} dist {}", sensor, sensor.coverage());
             let points = sensor.limits();
             for point in points {
+                // Inside area?
                 if !Self::inside(topleft, botright, &point) {
                     continue;
                 }
-                println!("  {:?}", point);
+                //println!("  {:?}", point);
                 if !self.is_covered(&point) {
+                    //println!("Point {:?} is not covered", point);
                     return point;
                 }
             }
@@ -226,7 +228,9 @@ pub fn part1(input: &Map) -> usize {
 
 #[aoc(day15, part2)]
 pub fn part2(input: &Map) -> i64 {
-    0
+    let p = input.find_uncovered(&Coordinate(0, 0), &Coordinate(4000000, 4000000));
+    println!("{:?}", p);
+    p.0 * 4000000 + p.1
 }
 
 // ---------------------------------------------------------------------------
@@ -272,7 +276,5 @@ Sensor at x=20, y=1: closest beacon is at x=15, y=3";
         let input = input_generator(INPUT);
         let p = input.find_uncovered(&Coordinate(0, 0), &Coordinate(20, 20));
         assert_eq!(Coordinate(14, 11), p);
-        let mut res: i64 = 0;
-        assert_eq!(56000011, res);
     }
 }

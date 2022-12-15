@@ -102,3 +102,7 @@ Classic Dijkstra. Use crates [`TooDee`](https://docs.rs/toodee/latest/toodee/ind
 
 ### [Day 14](https://adventofcode.com/2022/day/14)
 
+### [Day 15](https://adventofcode.com/2022/day/15)
+Part2 brute force requires searching through 4million * 4million positions, which is not really feasible.
+
+Instead, since only one position is possible, iterate on the sensor perimeter (coverage+1) to cut down computations to ~200ms.
