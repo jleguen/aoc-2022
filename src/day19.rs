@@ -13,40 +13,106 @@ use std::string::ParseError;
 //use petgraph::graph::{Graph, NodeIndex, UnGraph};
 //use petgraph::prelude::*;
 //use petgraph::visit::{depth_first_search, Control, DfsEvent};
+use std::ops::Index;
 
 // ---------------------------------------------------------------------------
-// Cost of a construction
-#[derive(Debug, Display, FromStr)]
-pub struct Cost {
+#[derive(Display, Debug, Clone)]
+enum Robot {
+    #[display("{0} ore-collecting robot")]
+    OreBot(usize),
+    #[display("{0} clay-collecting robot")]
+    ClayBot(usize),
+    #[display("{0} obsidian-collecting robot")]
+    ObsidianBot(usize),
+    #[display("{0} geode-cracking robot")]
+    GeodeBot(usize),
+}
+
+#[derive(Display, FromStr, Debug, Clone)]
+enum Material {
+    Ore,
+    Clay,
+    Obsidian,
+    Geode,
+}
+
+#[derive(Debug, Clone)]
+struct Cost {
     ore: usize,
     clay: usize,
     obsidian: usize,
 }
 
+impl Index<Material> for Cost {
+    type Output = usize;
+    fn index(&self, material: Material) -> &Self::Output {
+        match material {
+            Material::Ore => &self.ore,
+            Material::Clay => &self.clay,
+            Material::Obsidian => &self.obsidian,
+            Material::Geode => &0,
+        }
+    }
+}
+
+impl Default for Cost {
+    fn default() -> Self {
+        Cost { ore: 0, clay: 0, obsidian: 0 }
+    }
+}
+
+#[derive(Debug, Clone)]
+struct Node {
+    // Number of active robots
+    robots: [Robot; 4],
+    // amount of each Material
+    material: [Material; 4],
+}
+// ---------------------------------------------------------------------------
+// Blueprint with cost of a construction
+#[derive(Debug)]
 pub struct Blueprint {
     id: usize,
     ore_robot: Cost,
-}
-// ---------------------------------------------------------------------------
-enum Robot {
-    OreBot,
-    ClayBot,
-    ObsidianBot,
-    GeodeBot,
+    clay_robot: Cost,
+    obsidian_robot: Cost,
+    geode_robot: Cost,
 }
 
-struct Node {
-    robots: [usize; 4],
-    amount: [usize; 4],
+impl Blueprint {
+    // Parse material cost
+    // "Each obsidian robot costs 3 ore and 14 clay."
+    fn cost(line: &str) -> Cost {
+        let mut res = Cost::default();
+        let costs = line.split(" costs ").last().unwrap()
+            .trim_end_matches('.')
+            .split(" and ").map(|s| s.parse::<Material>()).map(|m| res[]);
+        println!("{:?}", costs);
+        res
+    }
+    fn from(line: &str) -> Self {
+        let id: usize = line
+            .split_once(':').unwrap()
+            .0.split_ascii_whitespace().last().unwrap()
+            .parse().unwrap();
+        let mut it = line.split_once(':').unwrap().1.split(".");
+        let ore_robot = Self::cost(it.next().unwrap());
+        let clay_robot = Self::cost(it.next().unwrap());
+        let obsidian_robot = Self::cost(it.next().unwrap());
+        let geode_robot = Self::cost(it.next().unwrap());
+        Blueprint { id, ore_robot, clay_robot, obsidian_robot, geode_robot }
+    }
 }
+
 // ---------------------------------------------------------------------------
 
 #[aoc_generator(day16)]
 pub fn input_generator(input: &str) -> Vec<Blueprint> {
     let mut res: Vec<Blueprint> = Vec::new();
     for line in input.lines() {
-        res.push()
+        res.push(Blueprint::from(line));
     }
+    println!("{:#?}", res);
     res
 }
 
