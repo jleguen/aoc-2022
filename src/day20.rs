@@ -25,6 +25,22 @@ pub struct Number {
     pos: usize,
     moved: bool,
 }
+
+#[derive(Display, Debug, Clone, Copy)]
+#[display("{value} ({moved})")]
+pub struct Num {
+    value: isize,
+    moved: bool,
+}
+
+impl Num {
+    fn from(value: isize) -> Self {
+        Num {
+            value,
+            moved: false,
+        }
+    }
+}
 // ---------------------------------------------------------------------------
 #[derive(Debug)]
 pub struct Ring {
@@ -36,7 +52,7 @@ impl Index<isize> for Ring {
     fn index(&self, index: isize) -> &Self::Output {
         let size = self.orig.len() as isize;
         let i = index.rem_euclid(size);
-        println!("Index {index} is {i} (len {size})");
+        //println!("Index {index} is {i} (len {size})");
         &self.orig[i as usize]
     }
 }
@@ -45,7 +61,7 @@ impl IndexMut<isize> for Ring {
     fn index_mut(&mut self, index: isize) -> &mut Self::Output {
         let size = self.orig.len() as isize;
         let i = index.rem_euclid(size);
-        println!("Index {index} is {i} (len {size})");
+        //println!("Index {index} is {i} (len {size})");
         &mut self.orig[i as usize]
     }
 }
@@ -68,34 +84,56 @@ impl Ring {
     }
 }
 // ---------------------------------------------------------------------------
+// uses rem_euclid
+fn pos_rem(vec: &VecDeque<Num>, pos: isize) -> usize {
+    let res = pos.rem_euclid(vec.len() as isize).try_into().unwrap();
+    //println!("+ REM Pos {pos} len {} {res}", vec.len());
+    res
+}
 
-fn move_elem(vec: &mut VecDeque<Number>, pos: isize) {
-    let from: usize = pos.rem_euclid(vec.len() as isize) as usize;
-    let to: usize = (pos + vec[from].value).rem_euclid(vec.len() as isize) as usize;
+fn move_elem(vec: &mut VecDeque<Num>, pos: isize) {
+    let from: usize = pos_rem(vec, pos);
+    let mut to: usize = pos_rem(vec, pos + vec[from].value);
+    if to == 0 {
+        to += vec.len() - 1;
+    }
     let mut rem = vec.split_off(from);
     let mut elem = rem.pop_front().unwrap();
+    //println!("  Move elem pos {pos} from {from} to {to}");
+    //println!("      vec.len() {} rem.len() {}", vec.len(), rem.len());
+    //println!("      elem {elem:?}");
     elem.moved = true;
     if to < from {
         // Easy
+        /*
+        if elem.value > rem.len().try_into().unwrap() {
+            to += 1;
+        }
+        */
         vec.insert(to, elem);
         vec.append(&mut rem);
     } else {
-        // Harder
-        rem.insert(to - vec.len() - 1, elem);
+        // Harder --
+        /*
+        if elem.value < 0 && elem.value.abs() > vec.len().try_into().unwrap() {
+            to -= 1;
+        }*/
+        //println!("      hard => to {}", to - vec.len());
+        rem.insert(to - vec.len(), elem);
         vec.append(&mut rem);
     }
 }
 // ---------------------------------------------------------------------------
-#[aoc_generator(day16, part1, vecdeque)]
-pub fn input_generator_vecdeque(input: &str) -> VecDeque<isize> {
+#[aoc_generator(day20, part1, vecdeque)]
+pub fn input_generator_vecdeque(input: &str) -> VecDeque<Num> {
     let mut vec = VecDeque::new();
     for line in input.lines() {
-        vec.push_back(line.parse().unwrap());
+        vec.push_back(Num::from(line.parse().unwrap()));
     }
     vec
 }
 
-#[aoc_generator(day16, part1, ring)]
+#[aoc_generator(day20, part1, ring)]
 pub fn input_generator_ring(input: &str) -> Ring {
     let mut vec = Vec::new();
     for line in input.lines() {
@@ -105,14 +143,45 @@ pub fn input_generator_ring(input: &str) -> Ring {
 }
 
 // ---------------------------------------------------------------------------
-#[aoc(day16, part1, ring)]
+#[aoc(day20, part1, ring)]
 pub fn part1_ring(input: &Ring) -> usize {
     0
 }
 
-#[aoc(day16, part1, vecdeque)]
-pub fn part1_vecdeque(input: &VecDeque<isize>) -> usize {
-    0
+#[aoc(day20, part1, vecdeque)]
+pub fn part1_vecdeque(input: &VecDeque<Num>) -> isize {
+    let mut vec = input.clone();
+    let mut index = 0;
+    loop {
+        //println!("{:?}", vec.iter().map(|e| e.value).collect::<Vec<isize>>());
+        let value = vec[index].value;
+        let moved = vec[index].moved;
+        //println!("Index {index} value {value} moved {moved}");
+        if vec[index].moved == true {
+            //println!("  Skip");
+            index += 1;
+            if index >= vec.len() {
+                //println!("  the end");
+                break;
+            }
+        } else {
+            move_elem(&mut vec, index as isize);
+        }
+    }
+
+    let zero = vec
+        .iter()
+        .enumerate()
+        .filter(|(_, v)| v.value == 0)
+        .map(|(i, _)| i)
+        .collect::<Vec<usize>>()[0] as isize;
+    //println!("{:?}", zero);
+
+    let one = vec[pos_rem(&vec, 1000 + zero)].value;
+    let two = vec[pos_rem(&vec, 2000 + zero)].value;
+    let three = vec[pos_rem(&vec, 3000 + zero)].value;
+    println!("{one} {two} {three} => {}", one + two + three);
+    one + two + three
 }
 
 // ---------------------------------------------------------------------------
@@ -137,6 +206,12 @@ mod tests {
     }
 
     #[test]
+    fn test_generator_vecdeque() {
+        let input = input_generator_vecdeque(INPUT);
+        assert_eq!(7, input.len());
+    }
+
+    #[test]
     fn test_ring() {
         let input = input_generator_ring(INPUT);
         assert_eq!(1, input[0].value);
@@ -148,6 +223,6 @@ mod tests {
     #[test]
     fn test_part1_vecdeque() {
         let input = input_generator_vecdeque(INPUT);
-        assert_eq!(1651, part1_vecdeque(&input));
+        assert_eq!(3, part1_vecdeque(&input));
     }
 }
