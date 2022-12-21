@@ -11,75 +11,66 @@ use std::string::ParseError;
 //use std::cmp::Ordering;
 //use std::iter::zip;
 //use petgraph::{graphmap::UnGraphMap};
-use bitmaps::Bitmap;
 
 // ---------------------------------------------------------------------------
-#[derive(Debug, Default)]
-pub struct Droplet {
-    xs: Bitmap<32>,
-    ys: Bitmap<32>,
-    zs: Bitmap<32>,
-}
-
-impl Droplet {
-    fn add(&mut self, p: &Point) {
-        self.xs.set(p.x, true);
-        self.ys.set(p.y, true);
-        self.zs.set(p.z, true);
-    }
-
-    fn bitmap_faces(bitmap: &Bitmap<32>) -> usize {
-        let mut faces = 0;
-        // For each index, if true and neighbour is false -> add one face
-        let first = bitmap.first_index().unwrap();
-        let last = bitmap.last_index().unwrap();
-        let true_indices: Vec<usize> = bitmap.into_iter().collect();
-        for i in true_indices {
-            println!("{} L {} R {}", i, bitmap.get(i-1), bitmap.get(i+1));
-            if i == first || bitmap.get(i-1) == false { faces += 1; }
-            if i == last || bitmap.get(i+1) == false { faces += 1; }
-        }
-        faces
-    }
-
-    fn area(&self) -> usize {
-        Self::bitmap_faces(&self.xs) + 
-        Self::bitmap_faces(&self.ys) + 
-        Self::bitmap_faces(&self.zs)
-    }
-}
 
 #[derive(Debug, FromStr, Display)]
 #[display("{x},{y},{z}")]
-struct Point {
-    x: usize,
-    y: usize,
-    z: usize,
+pub struct Point {
+    x: isize,
+    y: isize,
+    z: isize,
+}
+
+impl Point {
+    // true if points are neighbours:
+    // - two coordinates are identical
+    // - one coordinate is +/- 1
+    fn is_neighbour(&self, other: &Point) -> bool {
+        (self.x == other.x && self.y == other.y && (self.z - other.z).abs() == 1) ||
+        (self.x == other.x && (self.y - other.y).abs() == 1 && self.z == other.z) ||
+        ((self.x - other.x).abs() == 1 && self.y == other.y && self.z == other.z)
+    }
+
+    fn neighbours(&self) -> Vec<Point> {
+        let res = vec![
+            Point {x: self.x+1, y: self.y, z: self.z},
+            Point {x: self.x-1, y: self.y, z: self.z},
+            Point {x: self.x, y: self.y+1, z: self.z},
+            Point {x: self.x, y: self.y-1, z: self.z},
+            Point {x: self.x, y: self.y, z: self.z+1},
+            Point {x: self.x, y: self.y, z: self.z-1},
+        ];
+        res
+    }
 }
 
 // ---------------------------------------------------------------------------
 #[aoc_generator(day18)]
-pub fn input_generator(input: &str) -> Droplet {
-    let mut drop: Droplet = Droplet::default();
-    let mut maxx = 0;
-    let mut maxy = 0;
-    let mut maxz = 0;
+pub fn input_generator(input: &str) -> Vec<Point> {
+    let mut res: Vec<Point> = Vec::new();
     for line in input.lines() {
         let p: Point = line.parse().unwrap();
-        drop.add(&p);
+        res.push(p);
     }
-    println!("{:?}", drop);
-    drop
+    //println!("{:?}", res);
+    res
 }
 
 // ---------------------------------------------------------------------------
 #[aoc(day18, part1)]
-pub fn part1(input: &Droplet) -> usize {
-    input.area()
+pub fn part1(input: &Vec<Point>) -> usize {
+    let mut faces = input.len() * 6;
+    for v in input.iter() {
+        let count = input.iter().map(|p| v.is_neighbour(p)).filter(|v| *v).count();
+        faces -= count;
+    }
+    faces
 }
 
 #[aoc(day18, part2)]
-pub fn part2(input: &Droplet) -> usize {
+pub fn part2(input: &Vec<Point>) -> usize {
+    let visited = Vec::<Point>::new();
     0
 }
 
@@ -115,5 +106,7 @@ mod tests {
     }
     #[test]
     fn test_part2() {
+        let input = input_generator(INPUT);
+        assert_eq!(58, part1(&input));
     }
 }

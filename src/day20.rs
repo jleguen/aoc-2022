@@ -15,6 +15,7 @@ use std::string::ParseError;
 //use petgraph::visit::{depth_first_search, Control, DfsEvent};
 use std::collections::VecDeque;
 use std::ops::{Index, IndexMut};
+use std::io::{Write, stdout};
 
 // ---------------------------------------------------------------------------
 #[derive(Display, Debug, Clone, Copy)]
@@ -91,38 +92,21 @@ fn pos_rem(vec: &VecDeque<Num>, pos: isize) -> usize {
     res
 }
 
-fn move_elem(vec: &mut VecDeque<Num>, pos: isize) {
+fn move_num(vec: &mut VecDeque<Num>, pos: isize) {
     let from: usize = pos_rem(vec, pos);
-    let mut to: usize = pos_rem(vec, pos + vec[from].value);
-    if to == 0 {
-        to += vec.len() - 1;
+    let mut amount = vec[from].value;
+    if amount < 0 {
+        amount -= 1;
     }
-    let mut rem = vec.split_off(from);
-    let mut elem = rem.pop_front().unwrap();
-    //println!("  Move elem pos {pos} from {from} to {to}");
-    //println!("      vec.len() {} rem.len() {}", vec.len(), rem.len());
-    //println!("      elem {elem:?}");
+    let mut to: usize = pos_rem(vec, pos + amount);
+    
+    //println!("Move elem pos {pos} from {from} to {to}");
+        stdout().flush();
+    let mut elem = vec.remove(from).unwrap();
     elem.moved = true;
-    if to < from {
-        // Easy
-        /*
-        if elem.value > rem.len().try_into().unwrap() {
-            to += 1;
-        }
-        */
-        vec.insert(to, elem);
-        vec.append(&mut rem);
-    } else {
-        // Harder --
-        /*
-        if elem.value < 0 && elem.value.abs() > vec.len().try_into().unwrap() {
-            to -= 1;
-        }*/
-        //println!("      hard => to {}", to - vec.len());
-        rem.insert(to - vec.len(), elem);
-        vec.append(&mut rem);
-    }
+    vec.insert(to, elem);
 }
+
 // ---------------------------------------------------------------------------
 #[aoc_generator(day20, part1, vecdeque)]
 pub fn input_generator_vecdeque(input: &str) -> VecDeque<Num> {
@@ -153,19 +137,20 @@ pub fn part1_vecdeque(input: &VecDeque<Num>) -> isize {
     let mut vec = input.clone();
     let mut index = 0;
     loop {
+        //stdout().flush();
         //println!("{:?}", vec.iter().map(|e| e.value).collect::<Vec<isize>>());
         let value = vec[index].value;
         let moved = vec[index].moved;
-        //println!("Index {index} value {value} moved {moved}");
-        if vec[index].moved == true {
-            //println!("  Skip");
+        //println!("  Index {index} value {value} moved {moved}");
+        if moved == true {
+            //println!("  ! Skip");
             index += 1;
             if index >= vec.len() {
-                //println!("  the end");
+                //println!("  !! the end");
                 break;
             }
         } else {
-            move_elem(&mut vec, index as isize);
+            move_num(&mut vec, index as isize);
         }
     }
 
